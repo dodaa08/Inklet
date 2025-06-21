@@ -2,16 +2,11 @@ import express, {Router} from "express";
 const SUrouter : Router = express.Router();
 import bcrypt from "bcryptjs";
 const salt = 10;
-import prisma from "../../lib/prisma";
-
-import zod from "zod";
+// import prisma from "../../lib/prisma";
+import prisma from "@repo/db/prisma";
+import {UserSchema} from "@repo/common/types"
 
 // use zod for advance input validation : and then send over the data to the postgres..
-
-const UserSchema =  zod.object({
-    email : zod.string().email().max(8), // max len here !
-    password : zod.string().min(8).max(20)
-})
 
 SUrouter.get("/", (req, res)=>{
     res.send("SignUp Endpoint..");

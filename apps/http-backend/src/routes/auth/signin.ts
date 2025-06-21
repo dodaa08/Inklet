@@ -1,19 +1,25 @@
 import express, {Router} from "express";
 const SIrouter : Router = express.Router();
-import dotenv from "dotenv";
-dotenv.config();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import prisma from "../../lib/prisma";
-
-const jwtsecret = process.env.JWTSecret || "";
+// import prisma from "../../lib/prisma";
+import prisma from "@repo/db/prisma";
+import config from "@repo/backend-common/config";
+import { UserSchema } from "@repo/common/types";
 
 SIrouter.get("/", (req, res)=>{
     res.send("Signin Endpoint..");
 });
 
 SIrouter.post("/", async (req : any, res : any)=>{
-    const {email, password} = req.body();   
+    const Userdata = UserSchema.safeParse(req.body);
+    if (!Userdata.success) {
+      return res.status(400).json({
+        error: "Invalid input",
+        details: Userdata.error.flatten(),
+      });
+    }
+    const {email, password} = Userdata.data;
 
     try{
         const findUser = await prisma.user.findUnique({
@@ -36,7 +42,7 @@ SIrouter.post("/", async (req : any, res : any)=>{
               email: findUser.email,
               userId: findUser.id,
             },
-            jwtsecret,
+            config.JWT_SECRET ||"",
             { expiresIn: "7d" }
           );
           

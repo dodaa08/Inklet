@@ -19,6 +19,9 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "@repo/db" : "workspace:*",
+    "@repo/common" : "workspace:*",
+    "@repo/backend-common" : "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/cors": "^2.8.19",
     "@types/helmet": "^4.0.0",

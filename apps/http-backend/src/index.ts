@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import SIrouter from "./routes/auth/signin";
 import SUrouter from "./routes/auth/signup";
+import config from "@repo/backend-common/config";
 
 // Sort Cookies ...
 
@@ -35,6 +36,6 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(500).json({ error: "Something went wrong" });
 });
 
-app.listen(3000, () => {
+app.listen(config.PORT, () => {
   console.log("App listening on 3000...");
 });

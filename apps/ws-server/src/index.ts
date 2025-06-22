@@ -4,7 +4,9 @@ import {WebSocketServer} from "ws";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "@repo/backend-common/config";
 
-const PORT = Number(config.PORT);
+console.log("Config values:", config);
+
+const PORT = Number(config.PORTWS);
 const ws = new WebSocketServer({port : PORT});
 
 ws.on("connecton", async (ws, request)=>{

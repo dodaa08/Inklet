@@ -2,7 +2,6 @@ import express, {Router} from "express";
 const SUrouter : Router = express.Router();
 import bcrypt from "bcryptjs";
 const salt = 10;
-// import prisma from "../../lib/prisma";
 import prisma from "@repo/db/prisma";
 import {UserSchema} from "@repo/common/types"
 

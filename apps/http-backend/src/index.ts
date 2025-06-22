@@ -1,13 +1,16 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import SIrouter from "./routes/auth/signin";
-import SUrouter from "./routes/auth/signup";
+import SIrouter from "./routes/auth/signin.js";
+import SUrouter from "./routes/auth/signup.js";
+import roomRouter from "./routes/room/createRoom.js";
 import config from "@repo/backend-common/config";
 
 // Sort Cookies ...
 
 const app = express();
+
+console.log("Config :", config)
 
 app.use(cors({
   origin: "*", // Allow all (or use your specific frontend URL)
@@ -20,6 +23,7 @@ app.use(express.json());
 
 app.use("/api/signin", SIrouter);
 app.use("/api/signup", SUrouter);
+app.use("/api/room", roomRouter);
 
 app.get("/", (req, res) => {
   res.send("Working...");
@@ -37,5 +41,6 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 app.listen(config.PORT, () => {
-  console.log("App listening on 3000...");
+  console.log(`App listening on ${config.PORT}...`);
 });
+

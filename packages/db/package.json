@@ -2,21 +2,23 @@
   "name": "@repo/db",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "exports" : {
-    "./prisma" : "./Prisma/pg.ts"
+    "./prisma" : "./dist/Prisma/pg.js"
   },
   "scripts": {
+    "build": "tsc && cp -r src/generated dist/src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "prisma": "6.10.0"
+    "prisma": "6.10.0",
+    "typescript": "^5.8.2"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
     "@prisma/client": "6.10.0"
   }

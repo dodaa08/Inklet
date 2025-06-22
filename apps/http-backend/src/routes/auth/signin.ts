@@ -2,7 +2,6 @@ import express, {Router} from "express";
 const SIrouter : Router = express.Router();
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-// import prisma from "../../lib/prisma";
 import prisma from "@repo/db/prisma";
 import config from "@repo/backend-common/config";
 import { UserSchema } from "@repo/common/types";
@@ -37,14 +36,7 @@ SIrouter.post("/", async (req : any, res : any)=>{
             return res.status(401).json({ error: "Incorrect password" });
           }
           
-          const token = jwt.sign(
-            {
-              email: findUser.email,
-              userId: findUser.id,
-            },
-            config.JWT_SECRET ||"",
-            { expiresIn: "7d" }
-          );
+          const token = jwt.sign({ id: findUser.id }, config.JWT_SECRET  || "");
           
           return res.status(200).json({
             message: "User Signed In",

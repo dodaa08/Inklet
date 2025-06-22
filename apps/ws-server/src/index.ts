@@ -1,3 +1,5 @@
+//  ws layer room management, broadcast messages, 
+
 import {WebSocketServer} from "ws";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "@repo/backend-common/config";

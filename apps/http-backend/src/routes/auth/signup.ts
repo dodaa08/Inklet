@@ -12,7 +12,6 @@ SUrouter.get("/", (req, res)=>{
     res.send("SignUp Endpoint..");
 });
 
-
 SUrouter.post("/", async (req : any, res : any)=>{
     // use Zod object here : 
     const parseResult = UserSchema.safeParse(req.body);  // What's happening under the hood ? 

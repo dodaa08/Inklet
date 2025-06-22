@@ -12,7 +12,8 @@ export const AuthSchema = z.object({
 })
 
 export const room = z.object({
-    name : z.string()
+    name : z.string(),
+    adminId : z.string()
 });
 
 

@@ -14,12 +14,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User{
   id String @id @default(uuid())
   email String @unique  
   password String
   createdAt DateTime @default(now())
+  rooms room[]
+  chats chat[]
 }
+
+model room{
+  id Int @id @default(autoincrement())
+  name String @unique
+  createdAt DateTime @default(now())
+  adminId String
+  admin User  @relation(fields: [adminId], references: [id])
+  chats chat[]
+}
+
+
+model chat{ 
+  id Int @id @default(autoincrement())
+  roomId Int
+  message String
+  userId String
+  room room @relation(fields: [roomId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}
+
+
+
+
 
 
 

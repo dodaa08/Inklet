@@ -4,7 +4,11 @@ import helmet from "helmet";
 import SIrouter from "./routes/auth/signin.js";
 import SUrouter from "./routes/auth/signup.js";
 import roomRouter from "./routes/room/createRoom.js";
+import chatRouter from "./routes/chats/chat.js";
+
 import config from "@repo/backend-common/config";
+
+
 
 // Sort Cookies ...
 
@@ -21,9 +25,11 @@ app.use(cors({
 app.use(helmet());
 app.use(express.json());
 
-app.use("/api/signin", SIrouter);
+app.use("/api/signin", SIrouter); 
 app.use("/api/signup", SUrouter);
 app.use("/api/room", roomRouter);
+app.use("/api/chats", chatRouter);
+
 
 app.get("/", (req, res) => {
   res.send("Working...");

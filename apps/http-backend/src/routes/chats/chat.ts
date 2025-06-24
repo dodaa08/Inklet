@@ -2,7 +2,9 @@ import express from "express";
 import prisma from "@repo/db/prisma";
 import { Router } from "express";
 
+
 const chatRouter : Router = express.Router();
+
 
 chatRouter.get("/:roomId", async (req, res) => {
     const roomId = Number(req.params.roomId);

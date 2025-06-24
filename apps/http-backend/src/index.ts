@@ -8,8 +8,6 @@ import chatRouter from "./routes/chats/chat.js";
 
 import config from "@repo/backend-common/config";
 
-
-
 // Sort Cookies ...
 
 const app = express();

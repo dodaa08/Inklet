@@ -45,5 +45,33 @@ roomRouter.post("/", middleware, async (req: AuthRequest, res: Response) => {
   }
 });
 
+
+roomRouter.get("/:slug", async (req : any, res : any)=>{
+  
+  const slug = await (req.params.slug);
+
+  try{
+        const findSlug = await prisma.room.findUnique({
+             where : {
+                name : slug
+             }
+        });
+
+        if(!findSlug){
+           res.send("Room not found..");
+           return null;
+          }
+
+        res.status(200).json({
+          message : findSlug
+        });
+    
+    }
+    catch(error){
+      console.error(error);
+      res.send(error);
+    }
+})
+
 export default roomRouter;
 

@@ -1,12 +1,11 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useSocket from "@/app/hooks/useSocket";
-import { useEffect } from "react";
 
 type ChatMessage = {
-    id: number;
+    id? : number;
     message: string;
-    userId: string;
+    userId? : string;
     roomId: number;
     createdAt?: string;
 }
@@ -21,53 +20,43 @@ export default function({roomId, chats} : Chatroom) {
     const [allChats, setAllChats] = useState<ChatMessage[]>(chats);
     const {loading, socket} = useSocket();
 
-    // Update chats when props change
-    useEffect(() => {
-        setAllChats(chats);
-    }, [chats]);
-
     useEffect(()=>{
         if(socket && !loading && roomId){
-            // Fix 3: Convert roomId to number for backend compatibility
-            const numericRoomId = Number(roomId);
-            socket.send(JSON.stringify({
-                type : "join_room",
-                roomId : numericRoomId
-            }));
+            socket.onmessage = (event)=>{
+                try{
+                    const parsedData = JSON.parse(event.data);
+                    if(parsedData.type == "chat"){
+                        const newMessage : ChatMessage = {
+                            roomId : Number(parsedData.roomId),
+                            message : parsedData.message 
+                        }
+                        setAllChats((prev)=>[...prev, newMessage]);
+                    }
+                }
+                catch(error){
+                    console.error("Error parsing WebSocket message:", error);
+                }
+            }
+
+            socket.onerror = (error) => {
+                console.error("WebSocket error:", error);
+            };
         }
-    }, [socket, loading, roomId]);  
+    },[socket, loading, roomId]);
 
-    // Fix 4 & 6: Add WebSocket message handling for real-time updates
-    // useEffect(() => {
-    //     if (socket && !loading) {
-    //         socket.onmessage = (event) => {
-    //             try {
-    //                 const parsedData = JSON.parse(event.data);
-    //                 if (parsedData.type === "chat") {
-    //                     // Add new message to the chat list
-    //                     const newMessage: ChatMessage = {
-    //                         id: Date.now(), // Temporary ID
-    //                         message: parsedData.message,
-    //                         userId: parsedData.userId || "unknown",
-    //                         roomId: Number(parsedData.roomId)
-    //                     };
-    //                     setAllChats(prev => [...prev, newMessage]);
-    //                 }
-    //             } catch (error) {
-    //                 console.error("Error parsing WebSocket message:", error);
-    //             }
-    //         };
-
-    //         socket.onerror = (error) => {
-    //             console.error("WebSocket error:", error);
-    //         };
-    //     }
-    // }, [socket, loading]);
+    useEffect(()=>{
+        const numericID = Number(roomId);
+        if(socket && !loading && roomId){
+             socket.send(JSON.stringify({
+                type : "join_room",
+                roomId : numericID
+             }))
+        }
+    }, [socket, loading, roomId]);
 
     const sendMessage = async ()=>{
         if (!currentMessage.trim() || !socket || !roomId) return;
         
-        // Fix 3: Convert roomId to number for backend compatibility
         const numericRoomId = Number(roomId);
         socket.send(JSON.stringify({
             type : "chat",
@@ -75,12 +64,15 @@ export default function({roomId, chats} : Chatroom) {
             message : currentMessage
         }));
         
-        // Clear the input after sending
         setCurrentmessage("");
     }
 
+    useEffect(()=>{
+        setAllChats(chats)
+    },[chats]);
+
     const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             sendMessage();
         }
     }
@@ -96,8 +88,6 @@ export default function({roomId, chats} : Chatroom) {
                     ) : (
                         allChats.map((chat, index) => (
                             <div className="mb-2 p-2 bg-white rounded shadow-sm" key={index}>
-                                {/* Fix 5: Properly handle chat data structure */}
-                                <div className="text-sm text-gray-600">User: {chat.userId}</div>
                                 <div className="text-gray-800">{chat.message}</div>
                             </div>
                         ))

@@ -53,17 +53,17 @@ roomRouter.get("/:slug", async (req : any, res : any)=>{
   try{
         const findSlug = await prisma.room.findUnique({
              where : {
-                name : slug
+                id : slug
              }
         });
 
         if(!findSlug){
            res.send("Room not found..");
            return null;
-          }
+        }
 
         res.status(200).json({
-          message : findSlug
+          id : findSlug.id
         });
     
     }
@@ -74,4 +74,5 @@ roomRouter.get("/:slug", async (req : any, res : any)=>{
 })
 
 export default roomRouter;
+
 

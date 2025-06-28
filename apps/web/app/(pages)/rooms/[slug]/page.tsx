@@ -14,7 +14,7 @@ export default function(){
     const [roomId, setRoomid] = useState("");
     const [chats, setChats] = useState([]);
     const [loading, setloading] = useState(true);
-    const [error, setError] = useState("");
+    const [error, setError] = useState(""); 
    
 
 
@@ -27,34 +27,32 @@ export default function(){
             });
             
             const result = await response.json();
-            setRoomid(result.data.id);        
+            setRoomid(result.id);        
             setloading(false)
            
         }
         catch(error : any){
           console.error(error);
-          setError(error)
+          setError(error.message || "Failed to fetch room")
+          setloading(false)
           return;
         }
     }
 
     useEffect(()=>{
-        if(id && roomId && backendUrl){
+        if(id && backendUrl){
             findroomId();
-        }
-        else{
+        } else {
             setloading(false)
-            setError("Invalid room ID..");
+            setError("Invalid room ID or backend URL missing");
         }
-    
-    }, [id, roomId]);
+    }, [id, backendUrl]);
 
 
     const findChats = async ()=>{
         try{
-
             const chats : any = await axios.get(`${backendUrl}/api/chats/${roomId}`);
-            setChats(chats.data.message);
+            setChats(chats.data.messages);
             
         }
         catch(error){
@@ -67,14 +65,14 @@ export default function(){
         if(!loading && !error && roomId){
             findChats();
         }
-    }, []);
+    }, [roomId, loading, error]);
 
     return( 
         <>
         {
             error && <>
                <div>
-                {error}
+                {error} 
                </div>
             </>
         }

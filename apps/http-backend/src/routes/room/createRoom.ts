@@ -48,18 +48,17 @@ roomRouter.post("/", middleware, async (req: AuthRequest, res: Response) => {
 
 roomRouter.get("/:slug", async (req : any, res : any)=>{
   
-  const slug = await (req.params.slug);
+  const slug = req.params.slug;
 
   try{
         const findSlug = await prisma.room.findUnique({
              where : {
-                id : slug
+                name : slug
              }
         });
 
         if(!findSlug){
-           res.send("Room not found..");
-           return null;
+           return res.status(404).json({ error: "Room not found" });
         }
 
         res.status(200).json({
@@ -69,7 +68,7 @@ roomRouter.get("/:slug", async (req : any, res : any)=>{
     }
     catch(error){
       console.error(error);
-      res.send(error);
+      res.status(500).json({ error: "Internal server error" });
     }
 })
 

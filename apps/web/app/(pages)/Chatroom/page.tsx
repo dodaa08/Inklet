@@ -72,16 +72,14 @@ export default function({roomId, chats} : Chatroom) {
     },[chats]);
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {
-            sendMessage();
-        }
+        e.key === "Enter" ? sendMessage() : null;
     }
 
     return(
     <>
         <div className="flex justify-center py-20">
             <div className="flex flex-col gap-4 w-full max-w-2xl">
-                {/* Chat Messages Display */}
+                {/* Chat Messages Display with ternary */}
                 <div className="bg-gray-100 p-4 rounded-lg h-96 overflow-y-auto">
                     {allChats.length === 0 ? (
                         <div className="text-gray-500 text-center">No messages yet. Start the conversation!</div>
@@ -105,7 +103,11 @@ export default function({roomId, chats} : Chatroom) {
                         onKeyPress={handleKeyPress}
                     />
                     <button 
-                        className="py-2 px-6 bg-blue-500 text-white rounded-xl cursor-pointer hover:bg-blue-600 disabled:bg-gray-400" 
+                        className={`py-2 px-6 rounded-xl cursor-pointer ${
+                            !currentMessage.trim() || !socket || loading 
+                                ? "bg-gray-400 text-gray-600" 
+                                : "bg-blue-500 text-white hover:bg-blue-600"
+                        }`}
                         onClick={sendMessage}
                         disabled={!currentMessage.trim() || !socket || loading}
                     >
@@ -113,9 +115,14 @@ export default function({roomId, chats} : Chatroom) {
                     </button>
                 </div>
                 
-                {/* Connection Status */}
-                {loading && <div className="text-yellow-600 text-center">Connecting to chat...</div>}
-                {!socket && !loading && <div className="text-red-600 text-center">Not connected to chat</div>}
+                {/* Connection Status with ternary operators */}
+                {loading ? (
+                    <div className="text-yellow-600 text-center">Connecting to chat...</div>
+                ) : !socket ? (
+                    <div className="text-red-600 text-center">Not connected to chat</div>
+                ) : (
+                    <div className="text-green-600 text-center">Connected ✓</div>
+                )}
             </div>
         </div>
     </>

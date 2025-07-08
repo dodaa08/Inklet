@@ -3,6 +3,7 @@
 import Hero from "@/app/components/Landing /hero";
 import BottomColor from "../../components/Landing /heroColor";
 
+
 export default function Landing() {
     
   return (

@@ -59,11 +59,7 @@ export const authOptions = {
             const user = response.data;
       
             if (user && user.id) {
-              return {
-                id: user.id.toString(),
-                name: user.name || null,
-                email: user.email || credentials.email,
-              } satisfies User; 
+              return user; 
             }
           }
         } catch (error) {

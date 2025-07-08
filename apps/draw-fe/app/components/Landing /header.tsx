@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
+// import { Button } from "@repo/ui/button";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { signOut } from "next-auth/react";
 import {toast} from "react-toastify";
 import { useRouter } from "next/navigation";
 // import{ CustomDropdownButton } from "../../../../../packages/my-app/components/ui/dropdownMenu"
-
+import { Button } from "@repo/compo/components/button";
 
 const Header = ()=>{
 
@@ -59,10 +59,15 @@ const Header = ()=>{
 
             <div className="text-white font-sans flex gap-3 ">
             <button onClick={handlebtn} className="border-2 border-gray-900 rounded-xl  bg-orange-500 py-2 px-6 hover:cursor-pointer hover:bg-orange-600 transition duration-400 font-bold" children={isSignIn} /> 
+
+            {/* <Button variant="destructive">Secondary</Button> */}
+      
+            
             </div>
-        </div>
+        </div>  
         </>
     )
 }
 
 export default Header;
+

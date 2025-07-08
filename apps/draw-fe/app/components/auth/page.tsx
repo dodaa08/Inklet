@@ -46,6 +46,7 @@ const Authpage : FC<Auth> = ({type})=>{
             await signIn("github", {
                 callbackUrl : "/"
             });
+            
         }
         catch(error){
             console.error(error)

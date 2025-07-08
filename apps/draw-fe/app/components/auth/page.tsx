@@ -8,6 +8,7 @@ import { FaEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {toast} from "react-toastify";
+import axios from "axios";
 
 type Auth = {
     type : string,
@@ -63,6 +64,7 @@ const Authpage : FC<Auth> = ({type})=>{
         });
         if(res?.ok){
             toast.success("Login successful!");
+            router.push("/onboading");
         }
        }
        catch(error){
@@ -70,6 +72,60 @@ const Authpage : FC<Auth> = ({type})=>{
           toast.error("Invalid creds..")
        }
     }
+
+    const CredsSignup = async ()=>{
+       try{
+        // Basic validation before sending request
+        if (!email || !password) {
+            toast.error("Please fill in all fields");
+            return;
+        }
+        
+        if (password.length < 8) {
+            toast.error("Password must be at least 8 characters long");
+            return;
+        }
+        
+        if (!email.includes('@')) {
+            toast.error("Please enter a valid email address");
+            return;
+        }
+
+        const response = await axios.post("http://localhost:3003/api/signup", {
+             email,
+             password
+         });
+         
+         if(response.status === 200){
+             toast.success("Account created successfully!");
+             // Automatically sign in after signup
+             setTimeout(async () => {
+                 await signIn("credentials", {
+                     redirect: false,
+                     email,
+                     password
+                 });
+                 router.push("/onboarding");
+             }, 1000);
+         } else {
+             toast.error("Signup failed");
+         }
+        }
+        catch(error: any){
+           console.error("Signup error:", error);
+           if (error.response && error.response.data && error.response.data.error) {
+               console.log("Backend error details:", error.response.data);
+               toast.error(error.response.data.error);
+           } else if (error.response && error.response.data && error.response.data.details) {
+               console.log("Validation error details:", error.response.data.details);
+               toast.error("Invalid input data");
+           } else {
+               toast.error("Signup failed..");
+           }
+        }
+     }
+
+    const handleCredentials = type === "signin" ? CredsSignin : CredsSignup;
 
     return(
         <>
@@ -131,7 +187,7 @@ const Authpage : FC<Auth> = ({type})=>{
 
             <div className="flex flex-col justify-center">
           <Button
-            onClick={CredsSignin}
+            onClick={handleCredentials}
             className="border-2 border-gray-800 py-2 px-40 rounded-xl bg-orange-500"
             children={label}
           />

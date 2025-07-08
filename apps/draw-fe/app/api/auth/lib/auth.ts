@@ -15,7 +15,7 @@ declare module "next-auth" {
         image?: string | null;
       };
     }
-  
+    
     interface User {
       id: string;
       name?: string | null;
@@ -51,7 +51,7 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           if (credentials?.email && credentials?.password) {
-            const response = await axios.post<BackendUser>("http://localhost:3001/api/signup", {
+            const response = await axios.post<BackendUser>("http://localhost:3003/api/signin", {
               email: credentials.email,
               password: credentials.password,
             });
@@ -86,5 +86,10 @@ export const authOptions = {
         session.user.id = token.sub!;
         return session;
       },
+
+      // async redirect({ url, baseUrl }) {
+      //   // Always redirect to /onboarding after successful login
+      //   return `${baseUrl}/onboarding`;
+      // },
   },
 };

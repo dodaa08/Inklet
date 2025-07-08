@@ -15,7 +15,7 @@ const app = express();
 console.log("Config :", config)
 
 app.use(cors({
-  origin: "http://localhost:300", // Allow all (or use your specific frontend URL)
+  origin: "http://localhost:3000", // Allow all (or use your specific frontend URL)
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true

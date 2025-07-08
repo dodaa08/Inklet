@@ -40,6 +40,7 @@ SIrouter.post("/", async (req : any, res : any)=>{
           
           return res.status(200).json({
             message: "User Signed In",
+            id: findUser.id,
             email: findUser.email,
             token,
           });

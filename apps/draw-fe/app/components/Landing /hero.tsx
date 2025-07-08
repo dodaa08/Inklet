@@ -12,7 +12,7 @@ const Hero = () => {
   const handleStart = async () => {
     try {
       if (session.data) {
-        router.push("/");
+        router.push("/onboarding");
       } else {
         toast.error("User not LoggedIn");
         setTimeout(() => {

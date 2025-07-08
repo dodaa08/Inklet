@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 // import{ CustomDropdownButton } from "../../../../../packages/my-app/components/ui/dropdownMenu"
 import { Button } from "@repo/compo/components/button";
 
+
 const Header = ()=>{
 
     const [isSignIn, setSignin] = useState("LogIn");
@@ -18,7 +19,7 @@ const Header = ()=>{
 
     useEffect(() => {
         if (status === "authenticated") {
-          setSignin("signOut");
+          setSignin("sign out");
         } else if (status === "unauthenticated") {
           setSignin("LogIn");
         }
@@ -38,6 +39,18 @@ const Header = ()=>{
         }
       };
 
+    const middleware = ()=>{
+         if(!isSignIn){
+             toast.success("redirecting..")
+         }
+         else{
+           toast.error("User not SignedIn");
+           router.push("/auth/signin")
+         }
+    }
+
+
+    
     return(
         <>
         <div className="flex gap-110">
@@ -53,7 +66,8 @@ const Header = ()=>{
                 </Link>
 
              
-                 <Button className="text-xl font-sans font-bold hover:text-orange-500 rounded-xl  py-2 px-8 hover:cursor-pointer transition duration-400" children="Draw" /> 
+                 <Button onClick={middleware} className="text-xl font-sans font-bold hover:text-orange-500 rounded-xl  py-2 px-8 hover:cursor-pointer transition duration-400" children="Draw" /> 
+                 
 
             </div>
 

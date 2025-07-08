@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {toast} from "react-toastify";
 import axios from "axios";
+import Header from "../Landing /header";
 
 type Auth = {
     type : string,
@@ -129,6 +130,11 @@ const Authpage : FC<Auth> = ({type})=>{
 
     return(
         <>
+        <div className="flex flex-col">
+
+        <div className="flex justify-center py-4">
+            <Header />
+          </div>
         <div className="flex justify-center py-28">
 
           <div className="flex flex-col border-2 border-gray-800 w-max  px-5 py-5 rounded-xl gap-5">
@@ -190,7 +196,7 @@ const Authpage : FC<Auth> = ({type})=>{
             onClick={handleCredentials}
             className="border-2 border-gray-800 py-2 px-40 rounded-xl bg-orange-500"
             children={label}
-          />
+            />
           <div className="flex justify-center">
             <button onClick={()=>router.push(`/auth/${route}`)} className="mt-4 text-gray-400 cursor-pointer hover:text-gray-500 transition duration-400" children={buttonLabel}>
             </button>
@@ -198,6 +204,7 @@ const Authpage : FC<Auth> = ({type})=>{
         </div>
           </div>
         </div>
+            </div>
         </>
     )
 }

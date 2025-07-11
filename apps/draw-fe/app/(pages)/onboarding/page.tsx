@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@repo/ui/button";
+import Header from "@/app/components/onboarding/Header";
+import { IoChatbubbleSharp } from "react-icons/io5";
+
 
 export default function Onboarding(){
     
@@ -9,11 +11,11 @@ export default function Onboarding(){
     const [Startx, setStartx] = useState(0);
     const [Starty, setStarty] = useState(0);
     const [clicked, setClicked] = useState(false);
+    const [selectedShape, setSelectedShape] = useState<string>("");
 
     // why not have a global canvas 
     // also what is getBondingClient 
-    // more ... 
-
+    // more...
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -39,10 +41,79 @@ export default function Onboarding(){
                 const currentY = e.clientY - rect.top;
                 const width = currentX - Startx;
                 const height = currentY - Starty;
-        
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.strokeStyle = "white";
-                ctx.strokeRect(Startx, Starty, width, height);
+
+                if(selectedShape === "rectangle"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.strokeRect(Startx, Starty, width, height);
+                }
+                if(selectedShape === "circle"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.arc(Startx, Starty, width, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }   
+                if(selectedShape === "triangle"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.beginPath();
+                    ctx.moveTo(Startx, Starty);
+                    ctx.lineTo(Startx + width/2, Starty + height);  
+                    ctx.lineTo(Startx + width, Starty);
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+                if(selectedShape === "pencil"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.beginPath();
+                    ctx.moveTo(Startx, Starty);
+                    ctx.lineTo(Startx + width, Starty + height);
+                    ctx.stroke();
+                }
+                if(selectedShape === "eraser"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.beginPath();
+                    ctx.moveTo(Startx, Starty);
+                    ctx.lineTo(Startx + width, Starty + height);
+                    ctx.stroke();
+                }
+                if(selectedShape === "line"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.beginPath();
+                    ctx.moveTo(Startx, Starty);
+                    ctx.lineTo(Startx + width, Starty + height);
+                    ctx.stroke();
+                }   
+                if(selectedShape === "text"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.beginPath();
+                    ctx.moveTo(Startx, Starty);
+                    ctx.lineTo(Startx + width, Starty + height);
+                    ctx.stroke();
+                }
+
+                if(selectedShape === "arrow"){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.strokeStyle = "gray";
+                    ctx.beginPath();
+                    ctx.moveTo(Startx, Starty);
+                    ctx.lineTo(Startx + width, Starty + height);
+                    ctx.stroke();   
+                }
+                if(selectedShape === "eraser"){
+                  ctx.clearRect(0, 0, canvas.width, canvas.height);
+                  ctx.strokeStyle = "gray";
+                  ctx.beginPath();
+                  ctx.moveTo(Startx, Starty);
+                  ctx.lineTo(Startx + width, Starty + height);
+                  ctx.stroke();
+                }
+
+
             }
         }
 
@@ -56,7 +127,7 @@ export default function Onboarding(){
             canvas.removeEventListener("mousemove", handleMouseMove);
         };
 
-    }, [clicked, Startx, Starty]);
+    }, [clicked, Startx, Starty, selectedShape]);
 
     const ClearCanvas = () => {
         const canvas = canvasRef.current;
@@ -68,19 +139,29 @@ export default function Onboarding(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
+
     return(
         <div className="h-screen bg-black text-white">
             <div className="flex justify-center py-5">
-                <Button onClick={ClearCanvas} className="bg-red-500 py-2 px-5 rounded-xl text-white font-bold font-mono hover:bg-red-400 transition duration-400 cursor-pointer">
-                    Reset
-                </Button>
+               <Header 
+               icons_size={25}
+               ClearCnavas={ClearCanvas}
+               onSelectShape={setSelectedShape}
+               />
             </div>
-            <div className="flex justify-center items-center text-white">
+            <div className="flex justify-center items-center">
                 <canvas 
                     width={500} 
                     height={500} 
                     ref={canvasRef}
+                    className="transition duration-1000"
                 />
+            </div>
+
+            <div className="bottom-0 right-0 absolute mt-10 mr-10 mb-10">
+                <div className="bg-gray-900 rounded-full p-2">
+                    <IoChatbubbleSharp size={40} className="cursor-pointer hover:text-gray-300 transition duration-200 text-orange-300"/>
+                </div>
             </div>
         </div>
     )
